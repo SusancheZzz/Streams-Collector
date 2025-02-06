@@ -24,7 +24,7 @@ public class StreamDAO {
     }
 
     // получение стрима
-    public Stream<Book> getBooksStream() {
+    private Stream<Book> getBooksStream() {
         return Arrays.stream(books);
     }
 
@@ -42,7 +42,7 @@ public class StreamDAO {
     }
 
     // Вспомогалка
-    public List<Book> findBooksWithExtremeNumberOfPages(boolean findMax) {
+    private List<Book> findBooksWithExtremeNumberOfPages(boolean findMax) {
         return getBooksStream()
             .collect(Collectors.groupingBy(Book::getNumberOfPages))
             .entrySet().stream()
