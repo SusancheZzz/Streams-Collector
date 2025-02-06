@@ -2,19 +2,19 @@ package com.rntgroup.custom_collector;
 
 import com.rntgroup.custom_collector.entity.Property;
 import com.rntgroup.custom_collector.entity.SomeEntity;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PropertyCountCollectorTest {
 
     List<SomeEntity> entities;
 
-    @Before
+    @BeforeEach
     public void init() {
         entities = List.of(
             new SomeEntity(Map.of(Property.PROP1, true, Property.PROP2, false, Property.PROP3, false)),

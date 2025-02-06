@@ -2,15 +2,15 @@ package com.rntgroup.collections;
 
 import com.rntgroup.collections.entity.Author;
 import com.rntgroup.collections.entity.Book;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StreamDAOTest {
 
@@ -19,7 +19,7 @@ public class StreamDAOTest {
 
     StreamDAO streamDAO;
 
-    @Before
+    @BeforeEach
     public void init() {
         Author author1 = new Author("aut_1", (short) 10);
         Author author2 = new Author("aut_2", (short) 20);
