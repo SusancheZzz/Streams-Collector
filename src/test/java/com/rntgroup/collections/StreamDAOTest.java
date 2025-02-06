@@ -5,7 +5,6 @@ import com.rntgroup.collections.entity.Book;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,17 +41,17 @@ public class StreamDAOTest {
         authors = new Author[]{author1, author2, author3, author4, author5};
         books = new Book[]{book1, book2, book3, book4, book5};
 
-        streamDAO = new StreamDAO(Arrays.stream(books));
+        streamDAO = new StreamDAO(books);
     }
 
     @Test
-    public void testIsBooksWithSingleAuthor() {
-        assertTrue(streamDAO.isBooksWithSingleAuthor());
+    public void testIfExistBookWithSingleAuthor() {
+        assertTrue(streamDAO.ifExistBookWithSingleAuthor());
     }
 
     @Test
-    public void testGetBooksWithSingleAuthor() {
-        assertEquals(books[1], streamDAO.getBooksWithSingleAuthor());
+    public void testGetBookWithSingleAuthor() {
+        assertEquals(books[1], streamDAO.getBookWithSingleAuthor());
     }
 
     @Test

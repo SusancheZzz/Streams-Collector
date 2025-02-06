@@ -3,6 +3,7 @@ package com.rntgroup.collections;
 import com.rntgroup.collections.entity.Author;
 import com.rntgroup.collections.entity.Book;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -14,31 +15,38 @@ import java.util.stream.Stream;
 
 public class StreamDAO {
 
-    private final Stream<Book> bookStream;
+    private final Book[] books;
+    public static final Comparator<Map.Entry<Integer, List<Book>>> PAGES_COMPARATOR =
+        Comparator.comparingInt(Map.Entry::getKey);
 
-    public StreamDAO(Stream<Book> bookStream) {
-        this.bookStream = bookStream;
+    public StreamDAO(Book[] books) {
+        this.books = books;
+    }
+
+    // получение стрима
+    public Stream<Book> getBooksStream() {
+        return Arrays.stream(books);
     }
 
     // проверьте, не содержит ли какая-либо книга (или все книги) более 200 страниц
-    public boolean isBooksWithSingleAuthor() {
-        return bookStream
+    public boolean ifExistBookWithSingleAuthor() {
+        return getBooksStream()
             .anyMatch(book -> book.getNumberOfPages() > 200);
     }
 
     // найти книгу, в которой 200 страниц
-    public Book getBooksWithSingleAuthor() {
-        return bookStream
+    public Book getBookWithSingleAuthor() {
+        return getBooksStream()
             .filter(book -> book.getNumberOfPages() == 200)
             .findFirst().orElseThrow(NoSuchElementException::new);
     }
 
     // Вспомогалка
     public List<Book> findBooksWithExtremeNumberOfPages(boolean findMax) {
-        return bookStream
-            .collect(Collectors.groupingBy(Book::getNumberOfPages)) // Map <numberPages, List<Book>>
+        return getBooksStream()
+            .collect(Collectors.groupingBy(Book::getNumberOfPages))
             .entrySet().stream()
-            .min(Comparator.comparingInt(e -> findMax ? -e.getKey() : e.getKey()))
+            .max(findMax ? PAGES_COMPARATOR : PAGES_COMPARATOR.reversed())
             .map(Map.Entry::getValue)
             .orElseGet(List::of);
     }
@@ -55,42 +63,42 @@ public class StreamDAO {
 
     // отфильтруйте книги, в которых указан только один автор
     public List<Book> filterBookWhereSingleAuthor() {
-        return bookStream
+        return getBooksStream()
             .filter(b -> b.getAuthors().size() == 1)
             .toList();
     }
 
     // отсортируйте книги по количеству страниц/названию
     public List<Book> sortBookOfNumberPagesAndTitle() {
-        return bookStream
+        return getBooksStream()
             .sorted(Comparator.comparingInt(Book::getNumberOfPages).thenComparing(Book::getTitle))
             .toList();
     }
 
     // получите список всех названий книг
     public Set<String> getAllUniqueTitle() {
-        return bookStream
+        return getBooksStream()
             .map(Book::getTitle)
             .collect(Collectors.toSet());
     }
 
     // выведите в консоль список всех названий книг
     public void printAllUniqueTitle() {
-        bookStream
+        getBooksStream()
             .map(Book::getTitle)
             .forEach(System.out::println);
     }
 
     // получите список всех авторов
     public Set<Author> getAllAuthors() {
-        return bookStream
+        return getBooksStream()
             .flatMap(b -> b.getAuthors().stream())
             .collect(Collectors.toSet());
     }
 
     // Определите названия книги с MAX количеством страниц для каждого автора
     public Map<Author, String> findBookWithMaxNumberOfPagesForEveryoneAuthors() {
-        return bookStream
+        return getBooksStream()
             .flatMap(book -> book.getAuthors().stream()
                 .map(author -> Map.entry(author, book))) // <Author, Book>
             .collect(Collectors.toMap(
